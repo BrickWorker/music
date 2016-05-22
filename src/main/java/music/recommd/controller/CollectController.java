@@ -38,7 +38,7 @@ public class CollectController {
 	@RequestMapping(value = "{userId}", method = RequestMethod.POST)
 	public String collectCreate(@RequestParam(value = "musicId") Long musicId, @RequestParam("accessToken") String accessToken
 			,@PathVariable(value = "userId") String userId){
-		
+		return null;
 	}
 
 }

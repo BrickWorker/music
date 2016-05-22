@@ -27,7 +27,7 @@ public class AdminMonitor {
 	@Autowired
 	private ValidationService validationService;
 
-	@Before("execution(@backend.annotation.Admin * *(..))")
+	@Before("execution(@music.recommd.annotation.Admin * *(..))")
 	public void nullCheck(JoinPoint joinPoint) {
 		MethodSignature methodSignature = (MethodSignature) joinPoint
 				.getSignature();
