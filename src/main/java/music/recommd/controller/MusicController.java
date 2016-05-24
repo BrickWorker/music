@@ -13,7 +13,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import music.recommd.annotation.JSONResponse;
+import music.recommd.model.Album;
 import music.recommd.model.Music;
+import music.recommd.service.inter.AlbumService;
 import music.recommd.service.inter.MusicService;
 
 /**
@@ -27,6 +29,9 @@ public class MusicController {
 	
 	@Autowired
 	private MusicService musicService;
+	
+	@Autowired
+	private AlbumService albumService;
 	
 	
 	/**
@@ -432,6 +437,85 @@ public class MusicController {
 	public String getHot(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
 			@RequestParam(value = "limit", required = false, defaultValue = "5") Integer limit){
 		return JSON.toJSONString(this.musicService.findHot(page, limit),
+				SerializerFeature.WriteMapNullValue,
+				SerializerFeature.WriteEnumUsingToString,
+				SerializerFeature.DisableCircularReferenceDetect);
+	}
+	
+	
+	
+	/**
+	 * @api {GET} http://115.28.238.193:8080/music/music/{ablumId} 6-按专辑获取音乐
+	 * @apiName getMusicByAlbum
+	 * @apiGroup Smusic
+	 * @apiSuccessExample {json} Success-Response: HTTP/1.1 200 OK 
+     * {
+     *  	"status":200
+     *  	"data":[
+     *  		{
+     *  			musicAddress: "http://m10.music.126.net/20160513130848/0c11a527d07663ac39d48fdc3a30eb87/ymusic/8435/74b7/c4b4/2ee5f91f91e59cef4ebaf46ef5566d27.mp3",
+     *  			musicAlbum: {albumDescription: ""发行时间：1999-01-01；发行公司： 麦田音乐；那一年，一个看上去与这个世界颇有些格格不入的青年带着一盘全新的专辑出现在我们面前，将我们带入一个全新的时代，"
+     *  			albumId: 36,
+     *  			albumName: "我去2000年 ",
+     *  			albumPic: "http://p4.music.126.net/2KL6NzROawvUWX1kzM3vmA==/129742372092472.jpg?param=90y90 ",
+     *  			singer: {
+     *  				singerId: 37,
+     *  				singerName: "朴树",
+     *  				singerPic: "http://p4.music.126.net/2KL6NzROawvUWX1kzM3vmA==/129742372092472.jpg?param=90y90"
+     *  			}
+     *  		},
+     *  		musicDload: "0",
+     *  		musicId: 200,
+     *  		musicName: "火车开往冬天",
+     *  		musicPv: 0,
+     *  		musicSinger: {
+     *  			singerId: 37,
+     *  			singerName: "朴树",
+     *  			singerPic: "http://p4.music.126.net/2KL6NzROawvUWX1kzM3vmA==/129742372092472.jpg?param=90y90"
+     *  			}
+     *  		musicType: "112109"
+     *  		},
+     *  		{
+     *  			musicAddress: "http://m10.music.126.net/20160513130848/0c11a527d07663ac39d48fdc3a30eb87/ymusic/8435/74b7/c4b4/2ee5f91f91e59cef4ebaf46ef5566d27.mp3",
+     *  			musicAlbum: {albumDescription: ""发行时间：1999-01-01；发行公司： 麦田音乐；那一年，一个看上去与这个世界颇有些格格不入的青年带着一盘全新的专辑出现在我们面前，将我们带入一个全新的时代，"
+     *  			albumId: 36,
+     *  			albumName: "我去2000年 ",
+     *  			albumPic: "http://p4.music.126.net/2KL6NzROawvUWX1kzM3vmA==/129742372092472.jpg?param=90y90 ",
+     *  			singer: {
+     *  				singerId: 37,
+     *  				singerName: "朴树",
+     *  				singerPic: "http://p4.music.126.net/2KL6NzROawvUWX1kzM3vmA==/129742372092472.jpg?param=90y90"
+     *  			}
+     *  		},
+     *  		musicDload: "0",
+     *  		musicId: 200,
+     *  		musicName: "火车开往冬天",
+     *  		musicPv: 0,
+     *  		musicSinger: {
+     *  			singerId: 37,
+     *  			singerName: "朴树",
+     *  			singerPic: "http://p4.music.126.net/2KL6NzROawvUWX1kzM3vmA==/129742372092472.jpg?param=90y90"
+     *  			}
+     *  		musicType: "112109"
+     *  		}
+     *          .
+     *          .
+     *          .
+     *          .
+     *          .
+     *          .
+     *  
+     *  	],
+     *  msg: "OK"
+     * }
+	 */
+	//按专辑获取音乐
+	
+	@JSONResponse
+	@RequestMapping(value = "{albumId}", method = RequestMethod.GET)
+	public String getMusicByAlbum(@PathVariable("albumId") Long albumId){
+		Album album = this.albumService.findOne(albumId);
+		return JSON.toJSONString(this.musicService.findByAlbum(album),
 				SerializerFeature.WriteMapNullValue,
 				SerializerFeature.WriteEnumUsingToString,
 				SerializerFeature.DisableCircularReferenceDetect);

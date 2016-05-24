@@ -17,7 +17,7 @@ public class Music implements Serializable{
 	private Long musicId;
 	private String musicName;
 	private Singer musicSinger;
-	private Album album;
+	private Album musicAlbum;
 	private String musicType;
 	private Integer musicPv;
 	private Integer isNew;
@@ -47,10 +47,10 @@ public class Music implements Serializable{
 	@ManyToOne
 	@NotNull
 	public Album getMusicAlbum() {
-		return album;
+		return musicAlbum;
 	}
 	public void setMusicAlbum(Album album) {
-		this.album = album;
+		this.musicAlbum = album;
 	}
 	
 	@NotNull

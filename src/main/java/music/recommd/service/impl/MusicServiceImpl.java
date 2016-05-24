@@ -11,7 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 
+import music.recommd.dao.AlbumReposity;
 import music.recommd.dao.MusicReposity;
+import music.recommd.model.Album;
 import music.recommd.model.Music;
 import music.recommd.model.Singer;
 import music.recommd.service.inter.MusicService;
@@ -23,6 +25,9 @@ public class MusicServiceImpl implements MusicService{
 	
 	@Autowired
 	private MusicReposity musicReposity;
+	
+	@Autowired
+	private AlbumReposity albumReposity;
 
 	@Override
 	public List<Music> findAll(Integer page, Integer limit) {
@@ -61,8 +66,14 @@ public class MusicServiceImpl implements MusicService{
 
 	@Override
 	public Music countPv(Music music) {
-		int currentCount = music.getMusicPv();
-		music.setMusicPv(currentCount+1);
+		int currentMusicCount = music.getMusicPv();
+		music.setMusicPv(currentMusicCount+1);
+		//专辑浏览次数+1
+		//TODO 需要优化
+		Album album =  music.getMusicAlbum();
+		int currentAlbumCount =album.getAlbumPv();
+		album.setAlbumPv(currentAlbumCount+1);
+		this.albumReposity.save(album);
 		return music;
 	}
 
@@ -81,6 +92,11 @@ public class MusicServiceImpl implements MusicService{
 	@Override
 	public List<Music> findBySinger(Singer singer) {
 		return this.musicReposity.findAllBySinger(singer);
+	}
+
+	@Override
+	public List<Music> findByAlbum(Album album) {
+		return this.musicReposity.findAllByAlbum(album);
 	}
 
 

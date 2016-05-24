@@ -2,6 +2,7 @@ package music.recommd.service.inter;
 
 import java.util.List;
 
+import music.recommd.model.Album;
 import music.recommd.model.Music;
 import music.recommd.model.Singer;
 
@@ -27,6 +28,9 @@ public interface MusicService {
 	
 	//按歌手寻找歌单
 	List<Music> findBySinger(Singer singer);
+	
+	//按专辑获取音乐
+	List<Music> findByAlbum(Album album);
 	
 	
 

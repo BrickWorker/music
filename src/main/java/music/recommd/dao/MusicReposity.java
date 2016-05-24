@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import music.recommd.model.Album;
 import music.recommd.model.Music;
 import music.recommd.model.Singer;
 
@@ -28,5 +29,10 @@ public interface MusicReposity extends CrudRepository<Music, Long>  {
 	//按歌手寻找歌单
 	@Query("select mu from Music mu where mu.musicSinger =?1")
 	List<Music> findAllBySinger(Singer singer);
+	
+	
+	// 按专辑获取音乐
+	@Query("select mu from Music mu where mu.musicAlbum =?1")
+	List<Music> findAllByAlbum(Album album);
 
 }

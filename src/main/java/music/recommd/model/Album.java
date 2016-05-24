@@ -16,6 +16,7 @@ public class Album {
 	private Singer singer;
 	private String albumDescription;
 	private Integer albumPv;
+	private Integer isNew;
 	
 	@Id
 	@GeneratedValue
@@ -61,6 +62,14 @@ public class Album {
 	}
 	public void setAlbumPv(Integer albumPv) {
 		this.albumPv = albumPv;
+	}
+	
+	@NotNull
+	public Integer getIsNew() {
+		return isNew;
+	}
+	public void setIsNew(Integer isNew) {
+		this.isNew = isNew;
 	}
 
 }

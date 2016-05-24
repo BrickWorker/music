@@ -11,7 +11,6 @@ import com.alibaba.fastjson.JSON;
 import music.recommd.annotation.JSONResponse;
 import music.recommd.exception.UnauthorizedException;
 import music.recommd.model.User;
-import music.recommd.model.Validation;
 import music.recommd.service.inter.UserService;
 import music.recommd.service.inter.ValidationService;
 
@@ -39,6 +38,7 @@ public class ValidationController {
      * HTTP/1.1 201 CREATED
      * {
      *   "id": 1,
+     *   "name": 童志祥
      *   "accessToken": "f91d424b-f536-4f27-8baf-8a8cd6527c62",
      *   "uid": "7d49b86f-3a26-4fe0-a63e-6620cd4dbedb",
      * }
