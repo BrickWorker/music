@@ -19,7 +19,7 @@ public class CaptchaServiceImpl implements CaptchaService{
 
 	@Override
 	 public String getCaptcha(String phone) {
-	        capthcaMap.put(phone, RandomStringUtils.randomNumeric(4));
+	        capthcaMap.put(phone,  RandomStringUtils.randomNumeric(4));
 	        return capthcaMap.get(phone);
 	    }
 

@@ -16,10 +16,11 @@ public class Music implements Serializable{
 	private static final long serialVersionUID = -4993687468854744078L;
 	private Long musicId;
 	private String musicName;
-	private Singer singer;
+	private Singer musicSinger;
 	private Album album;
 	private String musicType;
 	private Integer musicPv;
+	private Integer isNew;
 	private String musicDload;
 	private String musicAddress;
 	
@@ -36,11 +37,12 @@ public class Music implements Serializable{
 	@ManyToOne
 	@NotNull
 	public Singer getMusicSinger() {
-		return singer;
+		return musicSinger;
 	}
-	public void setMusicSinger(Singer singer) {
-		this.singer = singer;
+	public void setMusicSinger(Singer musicSinger) {
+		this.musicSinger = musicSinger;
 	}
+	
 	
 	@ManyToOne
 	@NotNull
@@ -83,5 +85,13 @@ public class Music implements Serializable{
 	}
 	public void setMusicName(String musicName) {
 		this.musicName = musicName;
+	}
+	
+	@NotNull
+	public Integer getIsNew() {
+		return isNew;
+	}
+	public void setIsNew(Integer isNew) {
+		this.isNew = isNew;
 	}
 }

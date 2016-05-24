@@ -1,12 +1,17 @@
 package music.recommd.service.impl;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import music.recommd.dao.MusicReposity;
 import music.recommd.dao.UserReposity;
+import music.recommd.model.Music;
 import music.recommd.model.User;
 import music.recommd.service.inter.UserService;
 
@@ -16,6 +21,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserReposity userReposity;
+	
+	@Autowired
+	private MusicReposity musicReposity;
 
 	@Override
 	public User save(User user) {
@@ -46,6 +54,18 @@ public class UserServiceImpl implements UserService{
 			return true;
 		}
 		return false;
+	}
+
+	//用户添加收藏
+	@Override
+	public User collect(Long musicId, String user_id) {
+		User user = this.userReposity.findOne(user_id);
+		Music music = this.musicReposity.findOne(musicId);
+		Set<Music> userCollect = new HashSet<Music>();
+		userCollect = user.getuserCollect();
+		userCollect.add(music);
+		user.setuserCollect(userCollect);
+		return this.userReposity.save(user);
 	}
 
 }

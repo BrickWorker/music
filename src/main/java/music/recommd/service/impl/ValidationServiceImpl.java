@@ -33,15 +33,21 @@ public class ValidationServiceImpl implements ValidationService{
 	@Override
 	public Validation createOrUpdateAccessToken(User user) {
 		String Token = UUID.randomUUID().toString();
-		Validation validation = new Validation(user.getUserId(), Token);
-		return this.validationRepository.save(validation);
+		Validation validation = this.validationRepository.findByUid(user.getUserId());
+		if(validation == null){
+			validation = new Validation(user.getUserId(), user.getName(), Token);
+			return this.validationRepository.save(validation);
+		}else{
+			return validation;
+		}
+		
 	}
 
 
 	@Override
 	public Boolean validatePassword(String phone, String password) {
 		User user = this.userReposity.findByPhone(phone);
-		if(user.getPhone().equals(phone)){
+		if(user.getPassword().equals(password)){
 			return true;
 		}
 		return false;

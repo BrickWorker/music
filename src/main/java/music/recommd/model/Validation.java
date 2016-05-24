@@ -20,6 +20,7 @@ public class Validation  {
 
 	private Long id;
 	private String uid;
+	private String name;
 	private String accessToken;
 
 	public Validation() {
@@ -30,8 +31,9 @@ public class Validation  {
 	 * @param accessToken
 	 * @param isAdmin
 	 */
-	public Validation(String uid, String accessToken) {
+	public Validation(String uid, String name, String accessToken) {
 		this.uid = uid;
+		this.name = name;
 		this.accessToken = accessToken;
 	}
 
@@ -63,5 +65,14 @@ public class Validation  {
 
 	public void setUid(String uid) {
 		this.uid = uid;
+	}
+
+	@NotNull
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

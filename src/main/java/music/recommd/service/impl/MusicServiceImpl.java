@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import music.recommd.dao.MusicReposity;
 import music.recommd.model.Music;
+import music.recommd.model.Singer;
 import music.recommd.service.inter.MusicService;
 
 @Component
@@ -45,5 +46,42 @@ public class MusicServiceImpl implements MusicService{
 			return this.musicReposity.findByMusicTypeRight(typeLike, musicPage).getContent();
 		}
 	}
+
+	@Override
+	public List<Music> findByIsNew(Integer page, Integer limit) {
+		final PageRequest musicPage = new PageRequest(page, limit,
+				Direction.DESC, "musicId");
+		return this.musicReposity.findByIsNew(musicPage).getContent();
+	}
+
+	@Override
+	public Music findOne(Long id) {
+		return this.musicReposity.findOne(id);
+	}
+
+	@Override
+	public Music countPv(Music music) {
+		int currentCount = music.getMusicPv();
+		music.setMusicPv(currentCount+1);
+		return music;
+	}
+
+	@Override
+	public Music save(Music music) {
+		return this.musicReposity.save(music);
+	}
+
+	@Override
+	public List<Music> findHot(Integer page, Integer limit) {
+		final PageRequest musicPage = new PageRequest(page, limit,
+				Direction.DESC, "musicPv");
+		return this.musicReposity.findAll(musicPage).getContent();
+	}
+
+	@Override
+	public List<Music> findBySinger(Singer singer) {
+		return this.musicReposity.findAllBySinger(singer);
+	}
+
 
 }

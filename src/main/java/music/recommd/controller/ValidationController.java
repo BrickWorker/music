@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 
 import music.recommd.annotation.JSONResponse;
+import music.recommd.exception.UnauthorizedException;
 import music.recommd.model.User;
 import music.recommd.model.Validation;
 import music.recommd.service.inter.UserService;
@@ -47,7 +48,7 @@ public class ValidationController {
 	public String getAccessToken(@RequestParam(value = "phone") String phone,
 			@RequestParam(value = "password") String password){
 		if(!this.validationService.validatePassword(phone, password)){
-			throw new RuntimeException("password is not correct");
+			throw new UnauthorizedException("phone or password invalid");
 		}
 		User user = this.userService.findByPhone(phone);
 		return JSON.toJSONString(this.validationService.createOrUpdateAccessToken(user));

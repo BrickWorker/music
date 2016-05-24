@@ -3,9 +3,11 @@ package music.recommd.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
@@ -42,12 +44,18 @@ public class CaptchaController {
      * 			"captcha": "132856"
      * 		}
      */
-	
+	@ResponseStatus(value = HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST)
-	public String createCaptcha(String phone){
+	public String createCaptcha(@RequestParam(value = "phone") String phone){
+		System.err.println("start simon");
 		JSONObject jsonObject = new JSONObject();
 		String captcha = this.captchaService.getCaptcha(phone);
-		ShortMessagePushUtils.sendMessage(phone, captcha);
+		try {
+			ShortMessagePushUtils.sendMessage(phone, captcha);
+		} catch (Exception e) {
+			System.err.println("短信推送失败");
+			e.printStackTrace(System.err);
+		}
 		logger.info("phone:"+phone+"===========>captcha:"+captcha);
 		jsonObject.put("captcha", captcha);
 		return JSON.toJSONString(jsonObject);
@@ -55,7 +63,7 @@ public class CaptchaController {
 	
 	
 	/**
-	 * @api {GET} http://115.28.238.193/music/captcha/isPhoneRegistered?phone={phone_num} 2-验证账号是否被注册
+	 * @api {GET} http://115.28.238.193/music/tcaptcha/isPhoneRegistered?phone={phone_num} 2-验证账号是否被注册
      * @apiName find
      * @apiGroup SCaptcha
      * @apiSuccessExample {json} Success-Response: HTTP/1.1  FIND 
@@ -63,7 +71,7 @@ public class CaptchaController {
      * 		{
      * 			"status":"true";//true 表示号码已被注册
      * 		}
-     */
+     */  
 	@RequestMapping(value = "isPhoneRegistered", method = RequestMethod.GET)
 	  public String isPhoneRegistered(@RequestParam("phone") String phone){
     	JSONObject josnObject = new JSONObject();

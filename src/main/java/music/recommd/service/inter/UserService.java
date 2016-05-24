@@ -15,5 +15,11 @@ public interface UserService {
 	
 	//login
 	Boolean login(String phone, String password);
+	
+	
+	//用户收藏
+	User collect(Long musicId, String userId);
+	
+	
 
 }
