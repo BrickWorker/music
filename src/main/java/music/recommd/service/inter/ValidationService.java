@@ -13,4 +13,11 @@ public interface ValidationService {
 	
 	//验证用户名和密码
 	Boolean validatePassword(String phone, String password);
+	
+	
+	//用token获得用户
+	User getUserByAccessToken(String accessToken);
+	
+	//用token获得用户Id
+	String getUserIdByAccessToken(String accessToken);
 }

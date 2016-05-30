@@ -15,6 +15,9 @@ public interface MusicReposity extends CrudRepository<Music, Long>  {
 	
 	Page<Music> findAll(Pageable pageable);
 	
+	@Query("select count(*) from Music")
+	Long findLength();
+	
 	//按类型查找2
 	@Query("select mu from Music mu where mu.musicType like ?1%")
 	Page<Music> findByMusicTypeLeft(String musicType, Pageable pageable);

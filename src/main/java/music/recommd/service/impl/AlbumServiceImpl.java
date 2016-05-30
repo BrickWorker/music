@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import music.recommd.dao.AlbumReposity;
 import music.recommd.model.Album;
+import music.recommd.model.Singer;
 import music.recommd.service.inter.AlbumService;
 
 @Component
@@ -37,6 +38,16 @@ public class AlbumServiceImpl implements AlbumService{
 	@Override
 	public Album findOne(Long id) {
 		return this.albumReposity.findOne(id);
+	}
+
+	@Override
+	public List<Album> findAlbumBySinger(Singer singer) {
+		return this.albumReposity.findAllBySinger(singer);
+	}
+
+	@Override
+	public Long getNewLength() {
+		return this.albumReposity.findNewLength();
 	}
 
 }

@@ -31,7 +31,6 @@ public class User implements Serializable{
 	private String brief;
 	private Set<Music> userCollect;
 	
-	
 	 @Id
 	 @GeneratedValue(generator = "uuid")
 	 @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -94,6 +93,9 @@ public class User implements Serializable{
 	}
 
 
+	@ElementCollection
+	@CollectionTable(name = "musicCount", joinColumns = @JoinColumn(name = "user_id"))
+	@Column(name = "musicCount")
 	public void setuserCollect(Set<Music> userCollect) {
 		this.userCollect = userCollect;
 	}

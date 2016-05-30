@@ -2,6 +2,8 @@ package music.recommd.service.inter;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
+
 import music.recommd.model.Album;
 import music.recommd.model.Music;
 import music.recommd.model.Singer;
@@ -31,6 +33,9 @@ public interface MusicService {
 	
 	//按专辑获取音乐
 	List<Music> findByAlbum(Album album);
+	
+	//查询所有音乐长度
+	JSONObject findLength();
 	
 	
 

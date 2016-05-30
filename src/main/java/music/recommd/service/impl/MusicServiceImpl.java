@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.fastjson.JSONObject;
+
 import music.recommd.dao.AlbumReposity;
 import music.recommd.dao.MusicReposity;
 import music.recommd.model.Album;
@@ -98,6 +100,14 @@ public class MusicServiceImpl implements MusicService{
 	public List<Music> findByAlbum(Album album) {
 		return this.musicReposity.findAllByAlbum(album);
 	}
+
+	@Override
+	public JSONObject findLength() {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("length", this.musicReposity.findLength());
+		return jsonObject;
+	}
+
 
 
 }

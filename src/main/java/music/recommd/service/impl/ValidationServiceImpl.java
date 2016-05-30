@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import music.recommd.dao.UserReposity;
 import music.recommd.dao.ValidationRepository;
+import music.recommd.exception.UnauthorizedException;
 import music.recommd.model.User;
 import music.recommd.model.Validation;
 import music.recommd.service.inter.ValidationService;
@@ -51,6 +52,23 @@ public class ValidationServiceImpl implements ValidationService{
 			return true;
 		}
 		return false;
+	}
+
+
+	@Override
+	public User getUserByAccessToken(String accessToken) {
+		Validation validation = this.validationRepository.findByAccessToken(accessToken);
+		User user = this.userReposity.findOne(validation.getUid());
+		if(user == null){
+			throw new UnauthorizedException("用户不存在");
+		}
+		return user;
+	}
+
+
+	@Override
+	public String getUserIdByAccessToken(String accessToken) {
+		return this.validationRepository.findByAccessToken(accessToken).getUid();
 	}
 
 }
