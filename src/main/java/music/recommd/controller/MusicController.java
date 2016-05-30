@@ -110,6 +110,26 @@ public class MusicController {
 				SerializerFeature.DisableCircularReferenceDetect);
 	}
 	
+	/**
+	 * @api {GET} http://115.28.238.193:8080/music/length 7-查询音乐总数
+	 * @apiName getLength
+	 * @apiGroup Smusic
+	 * @apiSuccessExample {json} Success-Response: HTTP/1.1 200 OK 
+     * {
+     *  	"status":200
+     *  	"data":[
+     *  			"length":"203"
+     *  	],
+     *  msg: "OK"
+     * }
+	 */
+	
+	//查询所有音乐长度的接口
+	@JSONResponse
+	@RequestMapping(value = "length", method = RequestMethod.GET)
+	public String getAll(){
+		return JSON.toJSONString(this.musicService.findLength());
+	}
 	
 	/**
 	 * @api {GET} http://115.28.238.193:8080/music/music/type/{typeId}?page={page}&limit={limit}  2-查询音乐类型
@@ -520,4 +540,5 @@ public class MusicController {
 				SerializerFeature.WriteEnumUsingToString,
 				SerializerFeature.DisableCircularReferenceDetect);
 	}
+	
 }

@@ -126,4 +126,5 @@ public class SingerController {
 				SerializerFeature.WriteEnumUsingToString,
 				SerializerFeature.DisableCircularReferenceDetect);
 	}
+	
 }
