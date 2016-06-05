@@ -20,6 +20,4 @@ public interface AlbumService {
 	
 	//获取最新专辑长度
 	Long getNewLength();
-	
-	
 }
