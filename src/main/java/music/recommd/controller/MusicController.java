@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import music.recommd.annotation.JSONResponse;
 import music.recommd.model.Album;
 import music.recommd.model.Music;
+import music.recommd.model.User;
 import music.recommd.service.inter.AlbumService;
 import music.recommd.service.inter.MusicService;
+import music.recommd.service.inter.ValidationService;
 
 /**
  * @apiDefine Smusic 音乐(MUSIC)
@@ -33,14 +36,17 @@ public class MusicController {
 	@Autowired
 	private AlbumService albumService;
 	
+	@Autowired
+	private ValidationService validationService;
 	
 	/**
-	 * @api {GET} http://115.28.238.193:8080/music/music?page={page}&limit={limit}  1-查询所有音乐
+	 * @api {GET} http://115.28.238.193:8080/music/music?page={page}&limit={limit}&accessToken={}  1-查询所有音乐
 	 * @apiName getAll
 	 * @apiGroup Smusic
 	 * @apiSuccessExample {json} Success-Response: HTTP/1.1 200 OK 
      * {
      * 		//page（默认第0页）表示第几页，从第0页开始，limit（默认5条）表示页面大小。
+     *		//如果带了token，那么获取到的音乐数据会自动填充上是否被收藏字段
      *  	"status":200
      *  	"data":[
      *  		{
@@ -103,11 +109,21 @@ public class MusicController {
 	@JSONResponse
 	@RequestMapping(method = RequestMethod.GET)
 	public String getAll(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-			@RequestParam(value = "limit", required = false, defaultValue = "5") Integer limit){
-		return JSON.toJSONString(this.musicService.findAll(page, limit),
-				SerializerFeature.WriteMapNullValue,
-				SerializerFeature.WriteEnumUsingToString,
-				SerializerFeature.DisableCircularReferenceDetect);
+			@RequestParam(value = "limit", required = false, defaultValue = "5") Integer limit,
+			@RequestParam(value = "accessToken", required = false) String accessToken){
+		if(accessToken == null){
+			return JSON.toJSONString(this.musicService.findAll(page, limit),
+					SerializerFeature.WriteMapNullValue,
+					SerializerFeature.WriteEnumUsingToString,
+					SerializerFeature.DisableCircularReferenceDetect);
+		}else{
+			User user = this.validationService.getUserByAccessToken(accessToken);
+			return JSON.toJSONString(this.musicService.findAllByAccessToken(page, limit, user),
+					SerializerFeature.WriteMapNullValue,
+					SerializerFeature.WriteEnumUsingToString,
+					SerializerFeature.DisableCircularReferenceDetect);
+		}
+		
 	}
 	
 	/**
@@ -227,6 +243,33 @@ public class MusicController {
 				SerializerFeature.DisableCircularReferenceDetect);
 	}
 	
+	
+	/**
+	 * @api {GET} http://115.28.238.193:8080/music/music/type/length/{typeId}  7-按分类获取长度
+	 * @apiName getTypeLength
+	 * @apiGroup Smusic
+	 * @apiSuccessExample {json} Success-Response: HTTP/1.1 200 OK 
+     * {
+     *  	"status":200
+     *  	"data":
+     *  		{
+     *  	"length":30
+     *  }
+     *  msg: "OK"
+     * }
+	 */
+	
+	//按类型获取时的长度
+	@JSONResponse
+	@RequestMapping(value = "type/length/{typeId}", method = RequestMethod.GET)
+	public String getTypeMusic( @PathVariable(value = "typeId") String type){
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("length", this.musicService.getLength(type));
+		return JSON.toJSONString(jsonObject,
+				SerializerFeature.WriteMapNullValue,
+				SerializerFeature.WriteEnumUsingToString,
+				SerializerFeature.DisableCircularReferenceDetect);
+	}
 	
 	/**
 	 * @api {GET} http://115.28.238.193:8080/music/music/type/new?page={page}&limit={limit}  3-查询最新音乐

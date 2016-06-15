@@ -41,14 +41,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@ExceptionHandler
-	public ResponseEntity<Object> handleBusinessException(Exception ex,
-			WebRequest request) throws Exception {
-//		logger.info("error:", ex);
-		return handleExceptionInternal(ex, ex, getHttpHeaders(), HttpStatus.OK,
-				request);
-	}
-
 	@ExceptionHandler({ ConstraintViolationException.class,
 			TransactionSystemException.class,
 			DataIntegrityViolationException.class, PersistenceException.class,

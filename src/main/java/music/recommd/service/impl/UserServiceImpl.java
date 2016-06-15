@@ -1,6 +1,7 @@
 package music.recommd.service.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -61,11 +62,37 @@ public class UserServiceImpl implements UserService{
 	public User collect(Long musicId, String user_id) {
 		User user = this.userReposity.findOne(user_id);
 		Music music = this.musicReposity.findOne(musicId);
-		Set<Music> userCollect = new HashSet<Music>();
-		userCollect = user.getuserCollect();
+		Set<Music> userCollect = user.getuserCollect();
 		userCollect.add(music);
 		user.setuserCollect(userCollect);
 		return this.userReposity.save(user);
+	}
+
+	@Override
+	public Boolean isCollect(Long musicId, String userId) {
+		 User user = this.userReposity.findOne(userId);
+		 Music music = this.musicReposity.findOne(musicId);
+		 for (Music currentMusic : user.getuserCollect()) {
+			if(currentMusic == music){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public User removeCollect(Long musicId, String userId) {
+		User user = this.userReposity.findOne(userId);
+		Music music = this.musicReposity.findOne(musicId);
+		Set<Music> userCollect = user.getuserCollect();
+		userCollect.remove(music);
+		user.setuserCollect(userCollect);
+		return this.userReposity.save(user);
+	}
+
+	@Override
+	public List<User> getAll() {
+		return this.userReposity.getAll();
 	}
 
 }

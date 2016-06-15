@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import music.recommd.annotation.Admin;
 import music.recommd.annotation.JSONResponse;
 import music.recommd.service.inter.UserService;
+import music.recommd.service.inter.ValidationService;
+import scala.languageFeature.reflectiveCalls;
 
 
 /**
@@ -28,6 +31,9 @@ public class CollectController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ValidationService validationService;
 	
 	 /**
 		 * @api {POST} http://115.28.238.193/music/collect/{userId}/{musicId}?accessToken={} 1-用户添加收藏
@@ -62,5 +68,79 @@ public class CollectController {
 				SerializerFeature.WriteEnumUsingToString,
 				SerializerFeature.DisableCircularReferenceDetect);
 	}
-
+	
+	 /**
+	 * @api {GET} http://115.28.238.193/music/collect/{userId}/{musicId}?accessToken={} 2-查询是否被收藏
+	 * @apiName IsCollect
+	 * @apiGroup SCollect
+	 * @apiSuccessExample {json} Success-Response: HTTP/1.1 CREATE
+     * {
+     * 	 msg=OK
+     * 	 status=200
+     * 	 data:
+     * 		{
+     * 		"status":true;
+     * 		}
+     * }
+	 */
+	@Admin
+	@JSONResponse
+	@RequestMapping(value = "{userId}/{musicId}", method = RequestMethod.GET)
+	public String isCollect(@PathVariable(value = "musicId") Long musicId, @RequestParam("accessToken") String accessToken
+			,@PathVariable(value = "userId") String userId){
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("status", this.userService.isCollect(musicId, userId));
+		return JSON.toJSONString(jsonObject);
+	}
+	
+	 /**
+	 * @api {PUT} http://115.28.238.193/music/collect/{userId}/{musicId}?accessToken={} 3-移除收藏
+	 * @apiName RemoveCollect
+	 * @apiGroup SCollect
+	 * @apiSuccessExample {json} Success-Response: HTTP/1.1 CREATE
+     * {
+     * 	 msg=OK
+     * 	 status=200
+     * 	 data:
+     * 		{
+     * 		"status":true;//删除成功  
+     * 		}
+     * }
+	 */
+	
+	@Admin
+	@JSONResponse
+	@RequestMapping(value = "{userId}/{musicId}", method = RequestMethod.PUT)
+	public String removeCollect(@PathVariable(value = "musicId") Long musicId, @RequestParam("accessToken") String accessToken
+			,@PathVariable(value = "userId") String userId){
+		return JSON.toJSONString(this.userService.removeCollect(musicId, userId),
+				SerializerFeature.WriteMapNullValue,
+				SerializerFeature.WriteEnumUsingToString,
+				SerializerFeature.DisableCircularReferenceDetect);
+	}
+	
+	 /**
+	 * @api {GET} http://115.28.238.193/music/collect/get/all?accessToken={} 4-获取用户收藏
+	 * @apiName getAllCollect
+	 * @apiGroup SCollect
+	 * @apiSuccessExample {json} Success-Response: HTTP/1.1 CREATE
+    * {
+    * 	 msg=OK
+    * 	 status=200
+    * 	 data:
+    * 		{
+    * 		"status":true;
+    * 		}
+    * }
+	 */
+	@Admin
+	@JSONResponse
+	@RequestMapping(value = "get/all", method = RequestMethod.GET)
+	public String getCollect(@RequestParam("accessToken") String accessToken){
+		return JSON.toJSONString(this.validationService.getUserByAccessToken(accessToken).getuserCollect(),
+				SerializerFeature.WriteMapNullValue,
+				SerializerFeature.WriteEnumUsingToString,
+				SerializerFeature.DisableCircularReferenceDetect);
+		
+	}
 }

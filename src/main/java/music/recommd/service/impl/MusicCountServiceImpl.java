@@ -1,5 +1,7 @@
 package music.recommd.service.impl;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,11 @@ public class MusicCountServiceImpl implements MusicCountService{
 	@Override
 	public MusicCount isHeard(String userId, String musicId) {
 		return this.musicCountReposity.findByUserIdAndMusicId(userId, musicId);
+	}
+
+	@Override
+	public List<MusicCount> getMusicCountAll(String userId) {
+		return this.musicCountReposity.findAllByUserId(userId);
 	}
 
 }

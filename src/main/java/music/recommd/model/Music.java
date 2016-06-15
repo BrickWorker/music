@@ -23,6 +23,7 @@ public class Music implements Serializable{
 	private Integer isNew;
 	private String musicDload;
 	private String musicAddress;
+	private Long isCollect; //当用户登录时获取是否收藏该音乐
 	
 	
 	@Id
@@ -93,5 +94,13 @@ public class Music implements Serializable{
 	}
 	public void setIsNew(Integer isNew) {
 		this.isNew = isNew;
+	}
+	
+	@NotNull
+	public Long getIsCollect() {
+		return isCollect;
+	}
+	public void setIsCollect(Long isCollect) {
+		this.isCollect = isCollect;
 	}
 }

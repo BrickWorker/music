@@ -1,7 +1,12 @@
 package music.recommd.service.impl;
 
+import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
@@ -18,7 +23,9 @@ import music.recommd.dao.MusicReposity;
 import music.recommd.model.Album;
 import music.recommd.model.Music;
 import music.recommd.model.Singer;
+import music.recommd.model.User;
 import music.recommd.service.inter.MusicService;
+import music.recommd.utils.CommonConst;
 
 @Component
 @Transactional
@@ -36,6 +43,29 @@ public class MusicServiceImpl implements MusicService{
 		final PageRequest musicPage = new PageRequest(page, limit,
 				Direction.DESC, "musicId");
 		return this.musicReposity.findAll(musicPage).getContent();
+	}
+	
+	@Override
+	public List<Music> findAllByAccessToken(Integer page, Integer limit, User user) {
+		final PageRequest musicPage = new PageRequest(page, limit,
+				Direction.DESC, "musicId");
+		List<Music> musicList = new ArrayList<Music>();
+		musicList = this.musicReposity.findAll(musicPage).getContent();
+		Set<Music> musicSet = user.getuserCollect();
+		List<Long> collectId = new ArrayList<Long>();
+		for (Music music : musicSet) {
+			collectId.add(music.getMusicId());
+		}
+		//反填是否收藏的信息
+		for (Music music : musicList) {
+			for (Long cureentLong : collectId) {
+				if(music.getMusicId() == cureentLong){
+					music.setIsCollect(CommonConst.IS_COLLECT);
+				}
+			}
+			
+		}
+		return musicList;
 	}
 
 	@Override
@@ -108,6 +138,19 @@ public class MusicServiceImpl implements MusicService{
 		return jsonObject;
 	}
 
+	@Override
+	public Long getLength(String type) {
+		String typeLike = null;
+		switch (type.length()) {
+		case 6:
+			//语种
+			typeLike = type.substring(0,1);
+			return this.musicReposity.findLengthByTypeLeft(typeLike);
+		default:
+			typeLike = type;
+			return this.musicReposity.findLengthByTypeRight(typeLike);
+		}
+	}
 
 
 }
